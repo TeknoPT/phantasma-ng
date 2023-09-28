@@ -13,7 +13,6 @@ token TEST {
 
     global owner : address;
     
-    property name: string = "test";
     constructor(_owner: address){
         owner = _owner;
     }
@@ -24,6 +23,10 @@ token TEST {
     {
         Stake.stake(@S3dP2jjf1jUG9nethZBWbnu9a6dFqB7KveTWU7znis6jpDy, 1000000000);
         return 0;
+    }
+    
+    public getName() : string {
+        return "test";
     }
 }
 
@@ -39,12 +42,12 @@ contract mintcontract {
 	import Stake;
 	import Module;
 	import Number;
+	import ABI;
 	
 	global id: number;
 	global owner: address;
 	global contractName : string;
 	
-
 	constructor(contractOwner:address)	{
 		owner = contractOwner;
 		id = 0;
@@ -63,6 +66,9 @@ contract mintcontract {
         local decimals:number = 1;
         local flags:TokenFlags = TokenFlags.None;
         tokenName = "TEST";
-        Token.create($THIS_ADDRESS, tokenName,  "Test Token", maxSupply, decimals, flags, Module.getScript(TEST),  Module.getABI(TEST));
+        local abi = Module.getABI(TEST);
+        local methodName = "getName";
+        local nameABI = ABI.getMethod(TEST, "getName");
+        //Token.create($THIS_ADDRESS, Module.getScript(TEST),  Module.getABI(TEST));
 	}
 }
